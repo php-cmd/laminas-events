@@ -1,14 +1,17 @@
 {
-    "name": "/",
-    "description": "",
+    "name": "php-cmd/laminas-events",
+    "description": "Laminas EventManager support for CmdBus",
     "license": "BSD-3-Clause",
     "keywords": [
+        "cmdbus",
+        "command bus",
+        "event manager",
+        "mezzio"
     ],
-    "homepage": "",
+    "homepage": "https://github.com/php-cmd/laminas-events",
     "support": {
-        "issues": "",
-        "source": "",
-        "forum": ""
+        "issues": "https://github.com/php-cmd/laminas-events/issues",
+        "source": "https://github.com/php-cmd/laminas-events"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
@@ -42,13 +45,13 @@
     },
     "autoload": {
         "psr-4": {
-            "\\\\": "src/"
+            "PhpCmd\\Event\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "\\\\": "test/unit/",
-            "\\\\": "test/integration/"
+            "PhpCmd\\EventTest\\": "test/unit/",
+            "PhpCmd\\EventIntegrationTest\\": "test/integration/"
         }
     },
     "scripts": {
