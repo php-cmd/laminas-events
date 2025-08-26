@@ -13,7 +13,7 @@ use PhpCmd\CmdBus\CommandInterface;
 use PhpCmd\CmdBus\MiddlewareInterface;
 use PhpCmd\Event\PostHandleEvent;
 
-class PostHandleMiddleware implements MiddlewareInterface, EventManagerAwareInterface
+final class PostHandleMiddleware implements MiddlewareInterface, EventManagerAwareInterface
 {
     use EventManagerAwareTrait;
 

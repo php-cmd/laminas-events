@@ -4,16 +4,14 @@ declare(strict_types=1);
 
 namespace PhpCmd\Event\Container;
 
+use Laminas\EventManager\AbstractListenerAggregate;
 use Laminas\EventManager\EventManager;
 use Laminas\EventManager\EventManagerInterface;
-use Laminas\ServiceManager\Exception;
 use PhpCmd\Event\Exception\InvalidServiceException;
-use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
-use Psr\Container\NotFoundExceptionInterface;
 
 use function get_debug_type;
-use function gettype;
+use function is_callable;
 use function is_object;
 use function sprintf;
 
@@ -22,13 +20,6 @@ class ListenerConfigurationDelegator
     private const DEFAULT_PRIORITY = 1;
     /**
      * Decorate an EventManager instance by attaching its listeners from configuration.
-     * @param ContainerInterface $container
-     * @param string $serviceName
-     * @param callable $callback
-     * @return EventManagerInterface
-     * @throws InvalidServiceException If $callback produces something other than EventManagerInterface instance
-     * @throws NotFoundExceptionInterface If $spec['listener'] is not found in the container
-     * @throws ContainerExceptionInterface
      */
     public function __invoke(ContainerInterface $container, string $serviceName, callable $callback): EventManagerInterface
     {
@@ -37,7 +28,7 @@ class ListenerConfigurationDelegator
             throw new InvalidServiceException(sprintf(
                 'Delegator factory %s cannot operate on a %s; please map it only to the %s service',
                 self::class,
-                is_object($eventManager) ? $eventManager::class . ' instance' : gettype($eventManager),
+                is_object($eventManager) ? $eventManager::class . ' instance' : get_debug_type($eventManager),
                 EventManager::class
             ));
         }
@@ -46,14 +37,33 @@ class ListenerConfigurationDelegator
             return $eventManager;
         }
 
-        $listeners = $container->get('config')['listeners'] ?? [];
-        if ($listeners !== []) {
-            foreach($listeners as $listener) {
-                $listener = $container->get($listener);
-                $listener->attach($eventManager);
-            }
-        }
+        $this->attachListeners($container, $eventManager);
 
         return $eventManager;
+    }
+
+    private function attachListeners(ContainerInterface $container, EventManagerInterface $eventManager): void
+    {
+        foreach ($container->get('config')['listeners'] ?? [] as $spec) {
+
+            $listener = $spec['listener'] ?? null;
+            $priority = $spec['priority'] ?? self::DEFAULT_PRIORITY;
+
+            if ($container->has($listener) && ! is_callable($listener)) {
+                $listener = $container->get($listener);
+                if ($listener instanceof AbstractListenerAggregate) {
+                    $listener->attach($eventManager, $priority);
+                }
+                continue;
+            } elseif (is_callable($listener) && isset($spec['event'])) {
+                if (is_array($spec['event'])) {
+                    foreach ($spec['event'] as $event) {
+                        $eventManager->attach($event, $listener, $priority);
+                    }
+                } else {
+                    $eventManager->attach($spec['event'], $listener, $priority);
+                }
+            }
+        }
     }
 }

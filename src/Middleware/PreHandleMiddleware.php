@@ -12,7 +12,7 @@ use PhpCmd\CmdBus\CommandInterface;
 use PhpCmd\CmdBus\MiddlewareInterface;
 use PhpCmd\Event\PreHandleEvent;
 
-class PreHandleMiddleware implements MiddlewareInterface, EventManagerAwareInterface
+final class PreHandleMiddleware implements MiddlewareInterface, EventManagerAwareInterface
 {
     use EventManagerAwareTrait;
 
