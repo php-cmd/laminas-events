@@ -35,6 +35,12 @@ final class ConfigProvider
                 EventManager\EventManager::class => [
                     Container\ListenerConfigurationDelegator::class,
                 ],
+                Middleware\PostHandleMiddleware::class => [
+                    Container\EventManagerAwareDelegator::class,
+                ],
+                Middleware\PreHandleMiddleware::class => [
+                    Container\EventManagerAwareDelegator::class,
+                ],
             ],
             'factories' => [
                 EventManager\EventManager::class => Container\EventManagerFactory::class,
@@ -42,6 +48,8 @@ final class ConfigProvider
             ],
             'invokables' => [
                 EventManager\SharedEventManager::class => EventManager\SharedEventManager::class,
+                Middleware\PostHandleMiddleware::class => Middleware\PostHandleMiddleware::class,
+                Middleware\PreHandleMiddleware::class  => Middleware\PreHandleMiddleware::class,
             ],
         ];
     }
