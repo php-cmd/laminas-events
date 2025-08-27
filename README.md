@@ -1,3 +1,1 @@
-# repo-template
-
-base repo to use as a template
+# Laminas Events Integration for CmdBus
