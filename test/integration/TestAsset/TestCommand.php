@@ -10,8 +10,4 @@ use PhpCmd\CmdBus\Command\NamedCommandTrait;
 final class TestCommand implements NamedCommandInterface
 {
     use NamedCommandTrait;
-
-    public function __construct(?string $name = null)
-    {
-    }
 }

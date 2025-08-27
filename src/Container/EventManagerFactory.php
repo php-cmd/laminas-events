@@ -8,10 +8,14 @@ use Laminas\EventManager\EventManager;
 use Laminas\EventManager\SharedEventManagerInterface;
 use Psr\Container\ContainerInterface;
 
+use function assert;
+
 final class EventManagerFactory
 {
     public function __invoke(ContainerInterface $container): EventManager
     {
-        return new EventManager($container->get(SharedEventManagerInterface::class));
+        $sharedEventManager = $container->get(SharedEventManagerInterface::class);
+        assert($sharedEventManager instanceof SharedEventManagerInterface);
+        return new EventManager($sharedEventManager);
     }
 }

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace PhpCmd\EventIntegrationTest\TestAsset;
 
-use PhpCmd\CmdBus\CommandInterface;
 use PhpCmd\CmdBus\CommandHandlerInterface;
+use PhpCmd\CmdBus\CommandInterface;
 
 final class TestCommandHandler implements CommandHandlerInterface
 {

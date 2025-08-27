@@ -8,7 +8,7 @@ use Laminas\EventManager\EventManagerAwareInterface;
 use Laminas\EventManager\EventManagerInterface;
 use Psr\Container\ContainerInterface;
 
-use function method_exists;
+use function assert;
 
 final class EventManagerAwareDelegator
 {
@@ -16,14 +16,17 @@ final class EventManagerAwareDelegator
         ContainerInterface $container,
         string $serviceName,
         callable $callback
-    ) {
+    ): EventManagerAwareInterface {
         // call services __invoke method to get an instance
         $service = $callback();
         // include a duck-type for the method name provided by the interface, ie if they just used the trait
-        if ($service instanceof EventManagerAwareInterface || method_exists($service, 'setEventManager')) {
-            $service->setEventManager($container->get(EventManagerInterface::class));
+        if ($service instanceof EventManagerAwareInterface) {
+            $eventManager = $container->get(EventManagerInterface::class);
+            assert($eventManager instanceof EventManagerInterface);
+            $service->setEventManager($eventManager);
         }
 
+        assert($service instanceof EventManagerAwareInterface);
         return $service;
     }
 }

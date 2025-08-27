@@ -9,5 +9,4 @@ use RuntimeException;
 
 final class InvalidServiceException extends RuntimeException implements ContainerExceptionInterface
 {
-
 }

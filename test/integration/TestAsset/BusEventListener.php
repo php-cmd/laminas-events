@@ -13,6 +13,11 @@ use PhpCmd\Event\PreHandleEvent;
 
 final class BusEventListener extends AbstractListenerAggregate
 {
+    /**
+     * Attach event listeners to the event manager.
+     *
+     * @param int $priority
+     */
     public function attach(EventManagerInterface $events, $priority = 1): void
     {
         $this->listeners[] = $events->attach(PreHandleEvent::NAME, [$this, 'onPreHandle'], $priority);
@@ -22,7 +27,9 @@ final class BusEventListener extends AbstractListenerAggregate
 
     public function onPreHandle(PreHandleEvent $event): string
     {
-        return $event->getTarget()->getName();
+        /** @var NamedCommandInterface $target */
+        $target = $event->getTarget();
+        return $target->getName();
     }
 
     public function onPostHandle(PostHandleEvent $event): string
