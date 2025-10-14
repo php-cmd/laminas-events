@@ -31,7 +31,7 @@
         }
     },
     "require": {
-        "php": "~8.2.0 || ~8.3.0 || ~8.4.0",
+        "php": "~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0",
         "php-cmd/cmd-bus": "^0.3.0",
         "beberlei/assert": "^3.3",
         "laminas/laminas-eventmanager": "^3.13",
@@ -42,7 +42,7 @@
         "laminas/laminas-servicemanager": "^4.4",
         "phpstan/phpstan": "^2.1",
         "phpstan/phpstan-phpunit": "^2.0",
-        "phpunit/phpunit": "^11.5.0"
+        "phpunit/phpunit": "^11.5.42"
     },
     "suggest": {
         "laminas/laminas-servicemanager": "Laminas\\ServiceManager component"
@@ -62,7 +62,8 @@
         "check": [
             "@cs-check",
             "@static-analysis",
-            "@test"
+            "@test",
+            "@test-integration"
         ],
         "cs-check": "phpcs",
         "cs-fix": "phpcbf",
