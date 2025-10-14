@@ -30,7 +30,6 @@ final class ConfigProviderTest extends TestCase
     {
         $config = ($this->provider)();
 
-        $this->assertIsArray($config);
         $this->assertArrayHasKey('dependencies', $config);
         $this->assertArrayHasKey(BusProvider::class, $config);
     }
@@ -39,7 +38,6 @@ final class ConfigProviderTest extends TestCase
     {
         $dependencies = $this->provider->getDependencies();
 
-        $this->assertIsArray($dependencies);
         $this->assertArrayHasKey('aliases', $dependencies);
         $this->assertArrayHasKey('delegators', $dependencies);
         $this->assertArrayHasKey('factories', $dependencies);
@@ -49,8 +47,10 @@ final class ConfigProviderTest extends TestCase
     public function testAliasesConfiguration(): void
     {
         $dependencies = $this->provider->getDependencies();
-        $aliases      = $dependencies['aliases'];
 
+        $this->assertArrayHasKey('aliases', $dependencies);
+        /** @phpstan-ignore offsetAccess.notFound */
+        $aliases = $dependencies['aliases'];
         $this->assertIsArray($aliases);
         $this->assertEquals(
             EventManager\EventManager::class,
@@ -73,8 +73,10 @@ final class ConfigProviderTest extends TestCase
     public function testDelegatorsConfiguration(): void
     {
         $dependencies = $this->provider->getDependencies();
-        $delegators   = $dependencies['delegators'];
 
+        $this->assertArrayHasKey('delegators', $dependencies);
+        /** @phpstan-ignore offsetAccess.notFound */
+        $delegators = $dependencies['delegators'];
         $this->assertIsArray($delegators);
         $this->assertArrayHasKey(EventManager\EventManager::class, $delegators);
         $this->assertContains(
@@ -98,8 +100,10 @@ final class ConfigProviderTest extends TestCase
     public function testFactoriesConfiguration(): void
     {
         $dependencies = $this->provider->getDependencies();
-        $factories    = $dependencies['factories'];
 
+        $this->assertArrayHasKey('factories', $dependencies);
+        /** @phpstan-ignore offsetAccess.notFound */
+        $factories = $dependencies['factories'];
         $this->assertIsArray($factories);
         $this->assertArrayHasKey(EventManager\EventManager::class, $factories);
         $this->assertEquals(
@@ -111,8 +115,10 @@ final class ConfigProviderTest extends TestCase
     public function testInvokablesConfiguration(): void
     {
         $dependencies = $this->provider->getDependencies();
-        $invokables   = $dependencies['invokables'];
 
+        $this->assertArrayHasKey('invokables', $dependencies);
+        /** @phpstan-ignore offsetAccess.notFound */
+        $invokables = $dependencies['invokables'];
         $this->assertIsArray($invokables);
         $this->assertArrayHasKey(EventManager\SharedEventManager::class, $invokables);
         $this->assertEquals(
@@ -137,7 +143,6 @@ final class ConfigProviderTest extends TestCase
     {
         $middleware = $this->provider->getMiddleware();
 
-        $this->assertIsArray($middleware);
         $this->assertArrayHasKey('pre_handle', $middleware);
         $this->assertArrayHasKey('post_handle', $middleware);
     }
@@ -145,9 +150,9 @@ final class ConfigProviderTest extends TestCase
     public function testPreHandleMiddlewareConfiguration(): void
     {
         $middleware = $this->provider->getMiddleware();
-        $preHandle  = $middleware['pre_handle'];
 
-        $this->assertIsArray($preHandle);
+        $this->assertArrayHasKey('pre_handle', $middleware);
+        $preHandle = $middleware['pre_handle'];
         $this->assertArrayHasKey('middleware', $preHandle);
         $this->assertArrayHasKey('priority', $preHandle);
         $this->assertEquals(PreHandleMiddleware::class, $preHandle['middleware']);
@@ -157,9 +162,9 @@ final class ConfigProviderTest extends TestCase
     public function testPostHandleMiddlewareConfiguration(): void
     {
         $middleware = $this->provider->getMiddleware();
-        $postHandle = $middleware['post_handle'];
 
-        $this->assertIsArray($postHandle);
+        $this->assertArrayHasKey('post_handle', $middleware);
+        $postHandle = $middleware['post_handle'];
         $this->assertArrayHasKey('middleware', $postHandle);
         $this->assertArrayHasKey('priority', $postHandle);
         $this->assertEquals(PostHandleMiddleware::class, $postHandle['middleware']);
@@ -170,7 +175,6 @@ final class ConfigProviderTest extends TestCase
     {
         $commandMap = $this->provider->getCommandMap();
 
-        $this->assertIsArray($commandMap);
         $this->assertEmpty($commandMap);
     }
 
@@ -179,8 +183,8 @@ final class ConfigProviderTest extends TestCase
         $config = ($this->provider)();
 
         $this->assertArrayHasKey(BusProvider::class, $config);
+        /** @phpstan-ignore offsetAccess.notFound */
         $busConfig = $config[BusProvider::class];
-
         $this->assertIsArray($busConfig);
         $this->assertArrayHasKey(BusProvider::COMMAND_MAP_KEY, $busConfig);
         $this->assertArrayHasKey(BusProvider::MIDDLEWARE_PIPELINE_KEY, $busConfig);

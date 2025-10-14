@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace PhpCmd\EventTest\Exception;
 
+use Exception;
 use PhpCmd\Event\Exception\InvalidServiceException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
 use RuntimeException;
+
+use function sprintf;
 
 #[CoversClass(InvalidServiceException::class)]
 final class InvalidServiceExceptionTest extends TestCase
@@ -45,7 +48,7 @@ final class InvalidServiceExceptionTest extends TestCase
 
     public function testExceptionCanBeConstructedWithPrevious(): void
     {
-        $previous  = new \Exception('Previous exception');
+        $previous  = new Exception('Previous exception');
         $exception = new InvalidServiceException('Test message', 0, $previous);
 
         $this->assertSame($previous, $exception->getPrevious());
@@ -61,28 +64,22 @@ final class InvalidServiceExceptionTest extends TestCase
 
     public function testExceptionCanBeCaughtAsRuntimeException(): void
     {
-        $wasCaught = false;
         try {
             throw new InvalidServiceException('Test');
         } catch (RuntimeException $e) {
-            $wasCaught = true;
             $this->assertInstanceOf(InvalidServiceException::class, $e);
+            return;
         }
-
-        $this->assertTrue($wasCaught, 'Exception was not caught as RuntimeException');
     }
 
     public function testExceptionCanBeCaughtAsContainerException(): void
     {
-        $wasCaught = false;
         try {
             throw new InvalidServiceException('Test');
         } catch (ContainerExceptionInterface $e) {
-            $wasCaught = true;
             $this->assertInstanceOf(InvalidServiceException::class, $e);
+            return;
         }
-
-        $this->assertTrue($wasCaught, 'Exception was not caught as ContainerExceptionInterface');
     }
 
     public function testExceptionWithEmptyMessage(): void

@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace PhpCmd\EventTest\Middleware;
 
 use Laminas\EventManager\EventManager;
+use Laminas\EventManager\EventManagerAwareInterface;
 use Laminas\EventManager\EventManagerInterface;
-use Laminas\EventManager\ResponseCollection;
 use PhpCmd\CmdBus\CommandHandlerInterface;
 use PhpCmd\CmdBus\CommandInterface;
+use PhpCmd\CmdBus\MiddlewareInterface;
 use PhpCmd\Event\Middleware\PreHandleMiddleware;
 use PhpCmd\Event\PreHandleEvent;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -102,14 +103,14 @@ final class PreHandleMiddlewareTest extends TestCase
     {
         $middleware = new PreHandleMiddleware();
 
-        $this->assertInstanceOf(\Laminas\EventManager\EventManagerAwareInterface::class, $middleware);
+        $this->assertInstanceOf(EventManagerAwareInterface::class, $middleware);
     }
 
     public function testMiddlewareInterface(): void
     {
         $middleware = new PreHandleMiddleware();
 
-        $this->assertInstanceOf(\PhpCmd\CmdBus\MiddlewareInterface::class, $middleware);
+        $this->assertInstanceOf(MiddlewareInterface::class, $middleware);
     }
 
     public function testProcessWithMultipleEventListeners(): void

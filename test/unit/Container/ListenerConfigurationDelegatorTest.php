@@ -6,12 +6,12 @@ namespace PhpCmd\EventTest\Container;
 
 use Laminas\EventManager\AbstractListenerAggregate;
 use Laminas\EventManager\EventManager;
-use Laminas\EventManager\EventManagerInterface;
 use PhpCmd\Event\Container\ListenerConfigurationDelegator;
 use PhpCmd\Event\Exception\InvalidServiceException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
+use stdClass;
 
 #[CoversClass(ListenerConfigurationDelegator::class)]
 final class ListenerConfigurationDelegatorTest extends TestCase
@@ -40,7 +40,7 @@ final class ListenerConfigurationDelegatorTest extends TestCase
 
     public function testInvokeThrowsExceptionWhenNotEventManager(): void
     {
-        $notEventManager = new \stdClass();
+        $notEventManager = new stdClass();
         $container       = $this->createMock(ContainerInterface::class);
 
         $callback = fn() => $notEventManager;
@@ -241,7 +241,7 @@ final class ListenerConfigurationDelegatorTest extends TestCase
         $container->method('get')
             ->willReturnCallback(fn($key) => match ($key) {
                 'config'             => $config,
-                'NonCallableService' => new \stdClass(), // Not a listener aggregate
+                'NonCallableService' => new stdClass(), // Not a listener aggregate
                 default              => null,
             });
 
@@ -301,11 +301,6 @@ final class ListenerConfigurationDelegatorTest extends TestCase
         $result->trigger('test.event');
 
         $this->assertTrue($callableListenerCalled);
-    }
-
-    public function testDelegatorIsCallable(): void
-    {
-        $this->assertTrue(is_callable($this->delegator));
     }
 
     public function testInvokeWithPrimitiveReturnValueThrowsException(): void

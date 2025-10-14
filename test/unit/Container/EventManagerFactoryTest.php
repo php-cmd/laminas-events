@@ -53,11 +53,6 @@ final class EventManagerFactoryTest extends TestCase
         $this->assertSame($sharedEventManager, $eventManager->getSharedManager());
     }
 
-    public function testFactoryIsCallable(): void
-    {
-        $this->assertTrue(is_callable($this->factory));
-    }
-
     public function testInvokeWithMockedSharedEventManager(): void
     {
         $sharedEventManager = $this->createMock(SharedEventManagerInterface::class);

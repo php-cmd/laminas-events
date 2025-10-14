@@ -78,11 +78,6 @@ final class EventManagerAwareDelegatorTest extends TestCase
         $this->assertTrue($callbackInvoked, 'Callback was not invoked');
     }
 
-    public function testDelegatorIsCallable(): void
-    {
-        $this->assertTrue(is_callable($this->delegator));
-    }
-
     public function testInvokeWithRealEventManager(): void
     {
         $eventManager = new EventManager();
